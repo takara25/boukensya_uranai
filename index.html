@@ -106,13 +106,10 @@
   </style>
 </head>
 <body>
-
 <h1>冒険者占い<br>~運命の職業診断~</h1>
-
 <div id="ad-before" class="ad-container">
   <p>ここに広告が入ります</p>
 </div>
-
 <div class="input-section" id="input-section">
   <p>生まれた日を入力してください！</p>
   <input type="number" placeholder="西暦 (例:1983)" id="year">
@@ -121,27 +118,22 @@
   <br>
   <button onclick="startFortune()">運命を知る</button>
 </div>
-
 <div id="loading" style="display:none;">
   <p>運命の地図を探しています...</p>
 </div>
-
 <div id="result-card">
   <img id="job-image" src="" alt="職業イメージ">
   <h2 id="job-name">職業名</h2>
   <p id="job-description">職業説明</p>
   <p id="job-voice">セリフ</p>
   <div class="diagnosis-text" id="job-detail-text">診断テキスト</div>
-
   <div class="share-buttons">
     <button onclick="shareOnTwitter()">Xでシェア</button>
     <button onclick="shareOnLine()">LINEでシェア</button>
   </div>
-
   <div id="ad-after" class="ad-container">
     <p>ここに診断後の広告が入ります</p>
   </div>
-
   <div style="margin-top:20px;">
     <button onclick="restart()">もう一度占う</button>
   </div>
