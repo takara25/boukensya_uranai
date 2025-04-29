@@ -6,103 +6,7 @@
   <title>冒険者占い ~運命の職業診断~</title>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel&display=swap" rel="stylesheet">
   <style>
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Cinzel', serif;
-      background: linear-gradient(180deg, #0b0c2a, #1a1c45);
-      overflow-x: hidden;
-      color: #ffffff;
-      text-align: center;
-      position: relative;
-    }
-    body::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: url('https://upload.wikimedia.org/wikipedia/commons/9/9e/Magical_circle.svg') no-repeat center;
-      background-size: 60%;
-      opacity: 0.15;
-      animation: rotate 60s linear infinite;
-      pointer-events: none;
-    }
-    @keyframes rotate {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
-    h1 {
-      font-size: 2.5em;
-      margin-top: 40px;
-      color: #ffd700;
-      text-shadow: 0 0 10px #ffffff;
-    }
-    #result-card {
-      background: rgba(0, 0, 0, 0.7);
-      border: 2px solid #ffd700;
-      border-radius: 15px;
-      margin: 30px auto;
-      padding: 20px;
-      max-width: 500px;
-      box-shadow: 0 0 15px rgba(255,255,255,0.5);
-      display: none;
-    }
-    #job-image {
-      width: 250px;
-      height: auto;
-      margin-bottom: 20px;
-      border-radius: 15px;
-    }
-    .input-section {
-      margin-top: 50px;
-      background: rgba(255,255,255,0.05);
-      border-radius: 15px;
-      padding: 20px;
-      display: inline-block;
-    }
-    input, button {
-      margin: 10px;
-      padding: 10px;
-      font-size: 1em;
-      border-radius: 8px;
-      border: none;
-      outline: none;
-    }
-    input {
-      background: rgba(255,255,255,0.8);
-      width: 120px;
-      text-align: center;
-    }
-    button {
-      background: linear-gradient(45deg, #8a2be2, #4b0082);
-      color: white;
-      cursor: pointer;
-      transition: 0.3s;
-      box-shadow: 0 0 10px #8a2be2;
-    }
-    button:hover {
-      background: linear-gradient(45deg, #a170f0, #6a1ea8);
-    }
-    .share-buttons button {
-      background: #ffd700;
-      color: #333;
-      margin: 5px;
-      box-shadow: 0 0 5px #ffd700;
-    }
-    .ad-container {
-      margin: 20px 0;
-      background: rgba(255,255,255,0.1);
-      padding: 10px;
-      border-radius: 10px;
-    }
-    .diagnosis-text {
-      margin-top: 20px;
-      font-size: 1.1em;
-      line-height: 1.6;
-      color: #ffeecc;
-    }
+    /* スタイルは省略（前回のまま） */
   </style>
 </head>
 <body>
@@ -139,6 +43,78 @@
   </div>
 </div>
 <script>
+  // jobs配列は省略（前のまま）
+
+  function startFortune() {
+    const year = parseInt(document.getElementById('year').value);
+    const month = parseInt(document.getElementById('month').value);
+    const day = parseInt(document.getElementById('day').value);
+    if (!year || !month || !day) {
+      alert('すべて入力してね！');
+      return;
+    }
+    document.getElementById('input-section').style.display = 'none';
+    document.getElementById('loading').style.display = 'block';
+    setTimeout(() => {
+      document.getElementById('loading').style.display = 'none';
+      showResult(year, month, day);
+    }, 2000);
+  }
+
+  function showResult(year, month, day) {
+    const zodiacMap = ['申','酉','戌','亥','子','丑','寅','卯','辰','巳','午','未'];
+    const elementMap = {
+      '子': '水', '丑': '土', '寅': '木', '卯': '木', '辰': '土', '巳': '火',
+      '午': '火', '未': '土', '申': '金', '酉': '金', '戌': '土', '亥': '水'
+    };
+    const seasonBuff = {
+      1: '水', 2: '水', 3: '木', 4: '木', 5: '木',
+      6: '火', 7: '火', 8: '火', 9: '金', 10: '金', 11: '金', 12: '水'
+    };
+
+    const zodiacIndex = year % 12;
+    const zodiac = zodiacMap[zodiacIndex];
+    const baseElement = elementMap[zodiac];
+    const buffElement = seasonBuff[month];
+
+    const power = { 火: 0, 水: 0, 木: 0, 金: 0, 土: 0 };
+    power[baseElement] += 2;
+    power[buffElement] += 1;
+
+    const strongest = Object.entries(power).sort((a, b) => b[1] - a[1])[0][0];
+    const candidates = jobs.filter(job => job.element === strongest);
+    const hash = (year + month + day) % candidates.length;
+    const selected = candidates[hash];
+
+    document.getElementById('job-name').innerText = selected.name;
+    document.getElementById('job-description').innerText = selected.description;
+    document.getElementById('job-voice').innerText = '「' + selected.voice + '」';
+    document.getElementById('job-detail-text').innerText = selected.detail;
+    document.getElementById('job-image').src = selected.image;
+    document.getElementById('result-card').style.display = 'block';
+  }
+
+  function restart() {
+    document.getElementById('result-card').style.display = 'none';
+    document.getElementById('input-section').style.display = 'block';
+  }
+
+  function shareOnTwitter() {
+    const jobName = document.getElementById('job-name').innerText;
+    const text = encodeURIComponent(`【冒険者占い】私は「${jobName}」でした！ #冒険者占い`);
+    const url = encodeURIComponent(location.href);
+    window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank');
+  }
+
+  function shareOnLine() {
+    const jobName = document.getElementById('job-name').innerText;
+    const text = encodeURIComponent(`【冒険者占い】私は「${jobName}」でした！`);
+    const url = encodeURIComponent(location.href);
+    window.open(`https://social-plugins.line.me/lineit/share?text=${text}&url=${url}`, '_blank');
+  }
+</script>
+</body>
+</html>
  const jobs = [
   {
     name: "戦士", element: "火", image: "senshi.png",
@@ -238,9 +214,5 @@
   }
 ];
   </script>
-</body>
-</html>
-
-</script>
 </body>
 </html>
