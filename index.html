@@ -138,12 +138,8 @@
     <button onclick="restart()">もう一度占う</button>
   </div>
 </div>
-
-<script src="script.js"></script>
-</body>
-</html>
-
-const jobs = [
+<script>
+ const jobs = [
   {
     name: "戦士", element: "火", image: "senshi.png",
     description: "力と防御のエキスパート。仲間を守る盾となる。",
@@ -151,7 +147,7 @@ const jobs = [
     detail: "あなたは火のエネルギーに満ちた存在。困難に立ち向かい、仲間を守ろうとする情熱を持っています。一途な正義感が周囲を惹きつけ、時にはその熱さで道を切り拓くでしょう。ただし、頑なになりすぎない柔軟さも、ときには必要です。"
   },
   {
-    name: "闘気の拳士", element: "火", image: "kenseii.png",
+    name: "闘気の拳士", element: "火", image: "kensei.png",
     description: "気を操り肉体を極限まで鍛えた格闘家。",
     voice: "拳ひとつで世界を変える！それがオレだ！",
     detail: "燃え上がる火の力を宿すあなたは、拳ひとつで未来を切り拓く戦士。情熱と爆発的なエネルギーに満ち、どんな壁も自らの力で壊して進みます。ただし、力任せではなく、心の目も開くことがさらなる飛躍を呼ぶでしょう。"
@@ -190,7 +186,7 @@ const jobs = [
     name: "星詠み", element: "水", image: "hoshiyomi.png",
     description: "星の導きを読み解く運命の語り手。",
     voice: "星々が示す未来、あなたに伝えましょう。",
-    detail: "星々のささやきを読み解く水と金の導き手。あなたは運命の流れを感じ取り、他者の歩むべき道を優しく照らします。目には見えぬものにこそ真実がある──そんな感性があなたの未来を輝かせるでしょう。"
+    detail: "星々のささやきを読み解く水と金の導き手。あなたは運命の流れを感じ取り、他者の歩むべき道を優しく照らします。目には見えぬものにこそ真実がある──そんな感性があなたの未来を輝かせる。"
   },
   {
     name: "盗賊", element: "木", image: "touzoku.png",
@@ -241,88 +237,11 @@ const jobs = [
     detail: "土と金の調和を体現する、癒しと守りの導き手。あなたは祈りと行動の両方を大切にし、人々の心に安らぎをもたらします。優しさは強さであり、あなたの存在そのものが仲間の支えとなるでしょう。"
   }
 ];
+    // ここに jobs 配列と占いロジック全文を貼り付けます
+  </script>
+</body>
+</html>
 
-  const zodiacMap = ['申', '酉', '戌', '亥', '子', '丑', '寅', '卯', '辰', '巳', '午', '未'];
-  const elementMap = {
-    '子': '水', '丑': '土', '寅': '木', '卯': '木', '辰': '土', '巳': '火', '午': '火',
-    '未': '土', '申': '金', '酉': '金', '戌': '土', '亥': '水'
-  };
-  const seasonBuff = {
-    1: '水', 2: '水', 3: '木', 4: '木', 5: '木',
-    6: '火', 7: '火', 8: '火', 9: '金', 10: '金', 11: '金', 12: '水'
-  };
-
-  function startFortune() {
-    const year = parseInt(document.getElementById('year').value);
-    const month = parseInt(document.getElementById('month').value);
-    const day = parseInt(document.getElementById('day').value);
-    if (!year || !month || !day) {
-      alert('すべて入力してね！');
-      return;
-    }
-    document.getElementById('input-section').style.display = 'none';
-    document.getElementById('loading').style.display = 'block';
-    setTimeout(() => {
-      document.getElementById('loading').style.display = 'none';
-      showResult(year, month, day);
-    }, 2000);
-  }
-
-  function showResult(year, month, day) {
-  const zodiacMap = ['申', '酉', '戌', '亥', '子', '丑', '寅', '卯', '辰', '巳', '午', '未'];
-  const elementMap = {
-    '子': '水', '丑': '土', '寅': '木', '卯': '木', '辰': '土', '巳': '火', '午': '火',
-    '未': '土', '申': '金', '酉': '金', '戌': '土', '亥': '水'
-  };
-  const seasonBuff = {
-    1: '水', 2: '水', 3: '木', 4: '木', 5: '木',
-    6: '火', 7: '火', 8: '火', 9: '金', 10: '金', 11: '金', 12: '水'
-  };
-
-  const zodiacIndex = year % 12;
-  const zodiac = zodiacMap[zodiacIndex];
-  const baseElement = elementMap[zodiac];
-  const buffElement = seasonBuff[month];
-
-  const power = { 火: 0, 水: 0, 木: 0, 金: 0, 土: 0 };
-  power[baseElement] += 2;
-  power[buffElement] += 1;
-
-  const strongest = Object.entries(power).sort((a, b) => b[1] - a[1])[0][0];
-  const candidates = jobs.filter(job => job.element === strongest);
-
-  // --- ここがポイント！ 誕生日から安定した選び方をする ---
-  const hash = (year + month + day) % candidates.length;
-  const selected = candidates[hash];
-
-  document.getElementById('job-name').innerText = selected.name;
-  document.getElementById('job-description').innerText = selected.description;
-  document.getElementById('job-voice').innerText = '「' + selected.voice + '」';
-  document.getElementById('job-image').src = selected.image;
-  document.getElementById('result-card').style.display = 'block';
-}
-
-
-  function restart() {
-    document.getElementById('result-card').style.display = 'none';
-    document.getElementById('input-section').style.display = 'block';
-  }
-
-  function shareOnTwitter() {
-    const jobName = document.getElementById('job-name').innerText;
-    const text = encodeURIComponent(`【冒険者占い】私は「${jobName}」でした！ #冒険者占い`);
-    const url = encodeURIComponent(location.href);
-    window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank');
-  }
-
-  function shareOnLine() {
-    const jobName = document.getElementById('job-name').innerText;
-    const text = encodeURIComponent(`【冒険者占い】私は「${jobName}」でした！`);
-    const url = encodeURIComponent(location.href);
-    window.open(`https://social-plugins.line.me/lineit/share?text=${text}&url=${url}`, '_blank');
-  }
 </script>
-
-
 </body>
 </html>
