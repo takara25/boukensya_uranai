@@ -187,25 +187,39 @@
   }
 
   function showResult(year, month, day) {
-    const zodiacIndex = year % 12;
-    const zodiac = zodiacMap[zodiacIndex];
-    const baseElement = elementMap[zodiac];
-    const buffElement = seasonBuff[month];
+  const zodiacMap = ['申', '酉', '戌', '亥', '子', '丑', '寅', '卯', '辰', '巳', '午', '未'];
+  const elementMap = {
+    '子': '水', '丑': '土', '寅': '木', '卯': '木', '辰': '土', '巳': '火', '午': '火',
+    '未': '土', '申': '金', '酉': '金', '戌': '土', '亥': '水'
+  };
+  const seasonBuff = {
+    1: '水', 2: '水', 3: '木', 4: '木', 5: '木',
+    6: '火', 7: '火', 8: '火', 9: '金', 10: '金', 11: '金', 12: '水'
+  };
 
-    const power = { 火: 0, 水: 0, 木: 0, 金: 0, 土: 0 };
-    power[baseElement] += 2;
-    power[buffElement] += 1;
+  const zodiacIndex = year % 12;
+  const zodiac = zodiacMap[zodiacIndex];
+  const baseElement = elementMap[zodiac];
+  const buffElement = seasonBuff[month];
 
-    const strongest = Object.entries(power).sort((a, b) => b[1] - a[1])[0][0];
-    const candidates = jobs.filter(job => job.element === strongest);
-    const selected = candidates[Math.floor(Math.random() * candidates.length)];
+  const power = { 火: 0, 水: 0, 木: 0, 金: 0, 土: 0 };
+  power[baseElement] += 2;
+  power[buffElement] += 1;
 
-    document.getElementById('job-name').innerText = selected.name;
-    document.getElementById('job-description').innerText = selected.description;
-    document.getElementById('job-voice').innerText = '「' + selected.voice + '」';
-    document.getElementById('job-image').src = selected.image;
-    document.getElementById('result-card').style.display = 'block';
-  }
+  const strongest = Object.entries(power).sort((a, b) => b[1] - a[1])[0][0];
+  const candidates = jobs.filter(job => job.element === strongest);
+
+  // --- ここがポイント！ 誕生日から安定した選び方をする ---
+  const hash = (year + month + day) % candidates.length;
+  const selected = candidates[hash];
+
+  document.getElementById('job-name').innerText = selected.name;
+  document.getElementById('job-description').innerText = selected.description;
+  document.getElementById('job-voice').innerText = '「' + selected.voice + '」';
+  document.getElementById('job-image').src = selected.image;
+  document.getElementById('result-card').style.display = 'block';
+}
+
 
   function restart() {
     document.getElementById('result-card').style.display = 'none';
