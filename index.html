@@ -97,6 +97,12 @@
       padding: 10px;
       border-radius: 10px;
     }
+    .diagnosis-text {
+      margin-top: 20px;
+      font-size: 1.1em;
+      line-height: 1.6;
+      color: #ffeecc;
+    }
   </style>
 </head>
 <body>
@@ -125,6 +131,7 @@
   <h2 id="job-name">職業名</h2>
   <p id="job-description">職業説明</p>
   <p id="job-voice">セリフ</p>
+  <div class="diagnosis-text" id="job-detail-text">診断テキスト</div>
 
   <div class="share-buttons">
     <button onclick="shareOnTwitter()">Xでシェア</button>
@@ -139,6 +146,11 @@
     <button onclick="restart()">もう一度占う</button>
   </div>
 </div>
+
+<script src="script.js"></script>
+</body>
+</html>
+
 
 <script>
   const jobs = [
