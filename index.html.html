@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>冒険者占い ~運命の職業診断~</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Cinzel', serif;
+      background: linear-gradient(180deg, #0b0c2a, #1a1c45);
+      overflow-x: hidden;
+      color: #ffffff;
+      text-align: center;
+      position: relative;
+    }
+    body::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('https://upload.wikimedia.org/wikipedia/commons/9/9e/Magical_circle.svg') no-repeat center;
+      background-size: 60%;
+      opacity: 0.15;
+      animation: rotate 60s linear infinite;
+      pointer-events: none;
+    }
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    h1 {
+      font-size: 2.5em;
+      margin-top: 40px;
+      color: #ffd700;
+      text-shadow: 0 0 10px #ffffff;
+    }
+    #result-card {
+      background: rgba(0, 0, 0, 0.7);
+      border: 2px solid #ffd700;
+      border-radius: 15px;
+      margin: 30px auto;
+      padding: 20px;
+      max-width: 500px;
+      box-shadow: 0 0 15px rgba(255,255,255,0.5);
+      display: none;
+    }
+    #job-image {
+      width: 250px;
+      height: auto;
+      margin-bottom: 20px;
+      border-radius: 15px;
+    }
+    .input-section {
+      margin-top: 50px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 15px;
+      padding: 20px;
+      display: inline-block;
+    }
+    input, button {
+      margin: 10px;
+      padding: 10px;
+      font-size: 1em;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+    }
+    input {
+      background: rgba(255,255,255,0.8);
+      width: 120px;
+      text-align: center;
+    }
+    button {
+      background: linear-gradient(45deg, #8a2be2, #4b0082);
+      color: white;
+      cursor: pointer;
+      transition: 0.3s;
+      box-shadow: 0 0 10px #8a2be2;
+    }
+    button:hover {
+      background: linear-gradient(45deg, #a170f0, #6a1ea8);
+    }
+    .share-buttons button {
+      background: #ffd700;
+      color: #333;
+      margin: 5px;
+      box-shadow: 0 0 5px #ffd700;
+    }
+    .ad-container {
+      margin: 20px 0;
+      background: rgba(255,255,255,0.1);
+      padding: 10px;
+      border-radius: 10px;
+    }
+    .diagnosis-text {
+      margin-top: 20px;
+      font-size: 1.1em;
+      line-height: 1.6;
+      color: #ffeecc;
+    }
+  </style>
+</head>
+<body>
+<h1>冒険者占い<br>~運命の職業診断~</h1>
+
+<div id="ad-before" class="ad-container">
+  <p>ここに広告が入ります</p>
+</div>
+
+<div class="input-section" id="input-section">
+  <p>生まれた日を入力してください！</p>
+  <input type="number" placeholder="西暦 (例:1983)" id="year">
+  <input type="number" placeholder="月 (例:6)" id="month">
+  <input type="number" placeholder="日 (例:25)" id="day">
+  <br>
+  <button onclick="startFortune()">運命を知る</button>
+</div>
+
+<div id="loading" style="display:none;">
+  <p>運命の地図を探しています...</p>
+</div>
+
+<div id="result-card">
+  <img id="job-image" src="" alt="職業イメージ">
+  <h2 id="job-name">職業名</h2>
+  <p id="job-description">職業説明</p>
+  <p id="job-voice">セリフ</p>
+  <div class="diagnosis-text" id="job-detail-text">診断テキスト</div>
+
+  <div class="share-buttons">
+    <button onclick="shareOnTwitter()">Xでシェア</button>
+    <button onclick="shareOnLine()">LINEでシェア</button>
+  </div>
+
+  <div id="ad-after" class="ad-container">
+    <p>ここに診断後の広告が入ります</p>
+  </div>
+
+  <div style="margin-top:20px;">
+    <button onclick="restart()">もう一度占う</button>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
