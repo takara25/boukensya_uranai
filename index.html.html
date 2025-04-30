@@ -1,1 +1,148 @@
-<!-- 再配布用：完全HTMLファイル（16職業・四柱推命ロジック・画像連携） -->
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>冒険者占い ~運命の職業診断~</title>
+  <style>
+    body {
+      background: linear-gradient(180deg, #0b0c2a, #1a1c45);
+      font-family: 'Yu Gothic', sans-serif;
+      color: white;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+    }
+    .input-section, #result-card {
+      margin-top: 40px;
+      background: rgba(0,0,0,0.6);
+      padding: 20px;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    input {
+      padding: 10px;
+      margin: 5px;
+      width: 100px;
+    }
+    button {
+      padding: 10px 20px;
+      background: #8a2be2;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    #job-image {
+      width: 200px;
+      border-radius: 10px;
+      margin-bottom: 15px;
+    }
+  </style>
+</head>
+<body>
+
+<h1>冒険者占い ~運命の職業診断~</h1>
+
+<div class="input-section" id="input-section">
+  <p>生年月日を入力してください</p>
+  <input type="number" id="year" placeholder="年(例:1990)">
+  <input type="number" id="month" placeholder="月">
+  <input type="number" id="day" placeholder="日">
+  <br>
+  <button onclick="startFortune()">診断する</button>
+</div>
+
+<div id="result-card" style="display:none;">
+  <img id="job-image" src="" alt="職業画像">
+  <h2 id="job-name"></h2>
+  <p id="job-description"></p>
+  <p id="job-voice"></p>
+  <p id="job-detail-text" style="color: #ffeecc;"></p>
+  <button onclick="restart()">もう一度占う</button>
+</div>
+
+<script>
+const jobs = [
+  {
+    name: "戦士", element: "火", image: "senshi.png",
+    description: "力と防御のエキスパート。仲間を守る盾となる。",
+    voice: "オレがみんなを守ってみせる！さあ、共に戦おう！",
+    detail: "あなたは火のエネルギーに満ちた存在..."
+  },
+  {
+    name: "魔法使い", element: "水", image: "mahoutsukai.png",
+    description: "強力な魔法で敵を圧倒する知恵の使い手。",
+    voice: "秘めたる力を解き放つ時...。いざ、魔法の嵐を！",
+    detail: "あなたは水のエネルギーを秘めた..."
+  },
+  {
+    name: "盗賊", element: "木", image: "touzoku.png",
+    description: "俊敏さと頭脳で戦うトリックスター。",
+    voice: "フフッ、オレについてこれるか？",
+    detail: "あなたは自由を愛し..."
+  },
+  {
+    name: "魔王", element: "火", image: "maou.png",
+    description: "破壊と支配を司る闇の王。",
+    voice: "世界はオレのものだ。",
+    detail: "あなたは火と金のエネルギーを内包..."
+  }
+  // 他の12職業も同様にここへ追加可能（省略）
+];
+
+function startFortune() {
+  const year = parseInt(document.getElementById('year').value);
+  const month = parseInt(document.getElementById('month').value);
+  const day = parseInt(document.getElementById('day').value);
+  if (!year || !month || !day) {
+    alert('すべて入力してください');
+    return;
+  }
+
+  const zodiacMap = ['申','酉','戌','亥','子','丑','寅','卯','辰','巳','午','未'];
+  const elementMap = {
+    '子': '水', '丑': '土', '寅': '木', '卯': '木', '辰': '土', '巳': '火',
+    '午': '火', '未': '土', '申': '金', '酉': '金', '戌': '土', '亥': '水'
+  };
+  const seasonBuff = {
+    1: '水', 2: '水', 3: '木', 4: '木', 5: '木',
+    6: '火', 7: '火', 8: '火', 9: '金', 10: '金', 11: '金', 12: '水'
+  };
+
+  const zodiacIndex = year % 12;
+  const zodiac = zodiacMap[zodiacIndex];
+  const baseElement = elementMap[zodiac];
+  const buffElement = seasonBuff[month];
+
+  const power = { 火: 0, 水: 0, 木: 0, 金: 0, 土: 0 };
+  power[baseElement] += 2;
+  power[buffElement] += 1;
+
+  const strongest = Object.entries(power).sort((a, b) => b[1] - a[1])[0][0];
+  const candidates = jobs.filter(job => job.element === strongest);
+  const hash = (year + month + day) % candidates.length;
+  const selected = candidates[hash];
+
+  document.getElementById('job-name').innerText = selected.name;
+  document.getElementById('job-description').innerText = selected.description;
+  document.getElementById('job-voice').innerText = "「" + selected.voice + "」";
+  document.getElementById('job-detail-text').innerText = selected.detail;
+  document.getElementById('job-image').src = selected.image;
+
+  document.getElementById('input-section').style.display = 'none';
+  document.getElementById('result-card').style.display = 'block';
+}
+
+function restart() {
+  document.getElementById('result-card').style.display = 'none';
+  document.getElementById('input-section').style.display = 'block';
+}
+</script>
+</body>
+</html>
