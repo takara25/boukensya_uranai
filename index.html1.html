@@ -1,0 +1,168 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>冒険者占い ~運命の職業診断~</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(180deg, #0b0c2a, #1a1c45);
+      color: white;
+      font-family: 'Cinzel Decorative', cursive;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+    h1 {
+      margin-top: 1.5em;
+      font-size: 1.8em;
+      color: #ffd700;
+      text-shadow: 0 0 10px #fff;
+    }
+    .input-section, #result-card {
+      background: rgba(255,255,255,0.05);
+      border-radius: 12px;
+      padding: 1em;
+      margin: 1em auto;
+      width: 90%;
+      max-width: 500px;
+    }
+    input {
+      width: 30%;
+      padding: 0.5em;
+      margin: 0.5em;
+      border-radius: 8px;
+      text-align: center;
+    }
+    button {
+      margin-top: 1em;
+      padding: 0.7em 1.5em;
+      font-size: 1em;
+      background: linear-gradient(45deg, #8a2be2, #4b0082);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: linear-gradient(45deg, #a170f0, #6a1ea8);
+    }
+    #job-image {
+      width: 80%;
+      max-width: 250px;
+      margin: 1em auto;
+      border-radius: 10px;
+    }
+    .share-buttons button {
+      background: #ffd700;
+      color: #000;
+      margin: 0.3em;
+      border-radius: 6px;
+      padding: 0.5em 1em;
+    }
+    .ad-container {
+      background: rgba(255,255,255,0.1);
+      padding: 0.7em;
+      margin: 1em auto;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 500px;
+    }
+    #job-detail-text {
+      font-size: 0.95em;
+      color: #ffeecc;
+      padding: 1em;
+    }
+  </style>
+</head>
+<body>
+<h1>冒険者占い<br>~運命の職業診断~</h1>
+
+<div class="ad-container">ここに診断前の広告</div>
+
+<div class="input-section" id="input-section">
+  <p>生年月日を入力してください</p>
+  <input type="number" id="year" placeholder="年">
+  <input type="number" id="month" placeholder="月">
+  <input type="number" id="day" placeholder="日">
+  <br>
+  <button onclick="startFortune()">診断する</button>
+</div>
+
+<div id="result-card" style="display:none;">
+  <img id="job-image" src="" alt="職業画像" />
+  <h2 id="job-name"></h2>
+  <p id="job-description"></p>
+  <p id="job-voice"></p>
+  <p id="job-detail-text"></p>
+
+  <div class="share-buttons">
+    <button onclick="shareOnTwitter()">Xでシェア</button>
+    <button onclick="shareOnLine()">LINEでシェア</button>
+  </div>
+
+  <div class="ad-container">ここに診断後の広告</div>
+
+  <button onclick="restart()">もう一度占う</button>
+</div>
+
+<script>
+  const jobs = [
+    { name: "戦士", element: "火", image: "senshi.png", description: "仲間を守る盾となる力の戦士", voice: "オレがみんなを守ってみせる！", detail: "あなたは火のエネルギーに満ちた..." },
+    { name: "魔法使い", element: "水", image: "mahoutsukai.png", description: "魔法で戦う知恵の使い手", voice: "秘めたる力を解き放つ時...", detail: "あなたは水のように柔軟で賢いタイプ..." }
+  ];
+
+  function startFortune() {
+    const y = parseInt(document.getElementById("year").value);
+    const m = parseInt(document.getElementById("month").value);
+    const d = parseInt(document.getElementById("day").value);
+    if (!y || !m || !d) return alert("すべて入力してね");
+
+    const zodiacMap = ['申','酉','戌','亥','子','丑','寅','卯','辰','巳','午','未'];
+    const elementMap = {'子':'水','丑':'土','寅':'木','卯':'木','辰':'土','巳':'火','午':'火','未':'土','申':'金','酉':'金','戌':'土','亥':'水'};
+    const seasonBuff = {1:'水',2:'水',3:'木',4:'木',5:'木',6:'火',7:'火',8:'火',9:'金',10:'金',11:'金',12:'水'};
+
+    const zodiac = zodiacMap[y % 12];
+    const base = elementMap[zodiac];
+    const buff = seasonBuff[m];
+    const power = {火:0,水:0,木:0,金:0,土:0};
+    power[base] += 2;
+    power[buff] += 1;
+
+    const top = Object.entries(power).sort((a,b)=>b[1]-a[1])[0][0];
+    const candidates = jobs.filter(j => j.element === top);
+    const choice = candidates[(y + m + d) % candidates.length];
+
+    document.getElementById("job-name").innerText = choice.name;
+    document.getElementById("job-description").innerText = choice.description;
+    document.getElementById("job-voice").innerText = "「" + choice.voice + "」";
+    document.getElementById("job-detail-text").innerText = choice.detail;
+    document.getElementById("job-image").src = choice.image;
+
+    document.getElementById("input-section").style.display = "none";
+    document.getElementById("result-card").style.display = "block";
+  }
+
+  function restart() {
+    document.getElementById("result-card").style.display = "none";
+    document.getElementById("input-section").style.display = "block";
+  }
+
+  function shareOnTwitter() {
+    const name = document.getElementById("job-name").innerText;
+    const txt = encodeURIComponent(`私は「${name}」でした！ #冒険者占い`);
+    const url = encodeURIComponent(location.href);
+    window.open(`https://twitter.com/intent/tweet?text=${txt}&url=${url}`, '_blank');
+  }
+
+  function shareOnLine() {
+    const name = document.getElementById("job-name").innerText;
+    const txt = encodeURIComponent(`私は「${name}」でした！`);
+    const url = encodeURIComponent(location.href);
+    window.open(`https://social-plugins.line.me/lineit/share?text=${txt}&url=${url}`, '_blank');
+  }
+</script>
+</body>
+</html>
