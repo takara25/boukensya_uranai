@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>冒険者占い ~運命の職業診断~</title>
+  <meta name="google-adsense-account" content="ca-pub-6587608659073668">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background: #0b0c2a;
+      color: white;
+      font-family: 'Cinzel Decorative', cursive;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+    }
+    input, button {
+      padding: 0.5em;
+      margin: 0.5em;
+      border-radius: 8px;
+      border: none;
+    }
+    #result-card {
+      display: none;
+      margin-top: 1em;
+    }
+  </style>
+</head>
+<body>
+<h1>冒険者占い ~運命の職業診断~</h1>
+<div class="input-section" id="input-section">
+  <p>生年月日を入力してください</p>
+  <input id="year" type="number" placeholder="年">
+  <input id="month" type="number" placeholder="月">
+  <input id="day" type="number" placeholder="日">
+  <br>
+  <button onclick="startFortune()">診断する</button>
+</div>
+<div id="result-card">
+  <img id="job-image" src="">
+  <h2 id="job-name"></h2>
+  <p id="job-description"></p>
+  <p id="job-voice"></p>
+  <p id="job-detail-text"></p>
+</div>
+<p style="font-size: 0.7em; color: #aaaaaa; margin-top: 30px;">
+※この診断コンテンツは一部にAI（ChatGPT等）を利用して生成されています。
+</p>
+<script>
+// 診断ロジックや職業配列はここに（省略）
+</script>
+</body>
+</html>
