@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>冒険者占い ~運命の職業診断~</title>
+  <meta name="google-adsense-account" content="ca-pub-6587608659073668">
   <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&display=swap" rel="stylesheet">
   <style>
     body {
@@ -91,6 +92,28 @@
 </head>
 <body>
 <h1>冒険者占い<br>~運命の職業診断~</h1>
+<div class="ad-container">ここに診断前の広告</div>
+<div class="input-section" id="input-section">
+  <p>生年月日を入力してください</p>
+  <input type="number" id="year" placeholder="年（例：1990）">
+  <input type="number" id="month" placeholder="月（例：6）">
+  <input type="number" id="day" placeholder="日（例：25）">
+  <button onclick="startFortune()">診断する</button>
+</div>
+<p style="font-size: 0.7em; color: #aaaaaa; margin-top: 30px;">
+※この診断コンテンツは一部にAI（ChatGPT等）を利用して作られています。
+</p>
+<div id="result-card" style="display:none;">
+  <img id="job-image" src="" alt="職業画像" />
+  <h2 id="job-name"></h2>
+  <p id="job-description"></p>
+  <p id="job-voice"></p>
+  <p id="job-detail-text"></p>
+  <div class="share-buttons">
+    <button onclick="shareOnTwitter()">Xでシェア</button>
+    <button onclick="shareOnLine()">LINEでシェア</button>
+  </div>
+  <div class="ad-container">ここに診断後の広告</div>
   <button onclick="restart()">もう一度占う</button>
 </div>
 <script>
@@ -231,16 +254,16 @@
 
   function shareOnTwitter() {
     const name = document.getElementById("job-name").innerText;
-    const txt = encodeURIComponent(`私は「${name}」でした！ #冒険者占い`);
+    const txt = encodeURIComponent(私は「${name}」でした！ #冒険者占い);
     const url = encodeURIComponent(location.href);
-    window.open(`https://twitter.com/intent/tweet?text=${txt}&url=${url}`, '_blank');
+    window.open(https://twitter.com/intent/tweet?text=${txt}&url=${url}, '_blank');
   }
 
   function shareOnLine() {
     const name = document.getElementById("job-name").innerText;
-    const txt = encodeURIComponent(`私は「${name}」でした！`);
+    const txt = encodeURIComponent(私は「${name}」でした！);
     const url = encodeURIComponent(location.href);
-    window.open(`https://social-plugins.line.me/lineit/share?text=${txt}&url=${url}`, '_blank');
+    window.open(https://social-plugins.line.me/lineit/share?text=${txt}&url=${url}, '_blank');
   }
 </script>
 </body>
